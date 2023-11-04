@@ -52,7 +52,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 if (originalInteraction.user.id === interaction.user.id) {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
-                    interaction.deferUpdate();
                     interaction.component.disabled = true;
 
                 } else {
