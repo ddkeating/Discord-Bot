@@ -52,6 +52,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 if (originalInteraction.user.id === interaction.user.id) {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
+                    interaction.deferUpdate();
+                    
                 } else {
                     interaction.reply("You can't click this button because you didn't create the original interaction.");
                 }
