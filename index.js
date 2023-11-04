@@ -53,21 +53,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
 
-                    // Replace the active button with a disabled button
-                    const disabledButton = {
-                        type: 'BUTTON',
-                        style: 'SECONDARY',
-                        customId: STOP_BUTTON_ID,
-                        label: 'Disabled Button',
-                        disabled: true, // Set the 'disabled' property to true
-                    };
-
-                    interaction.message.components[0].components[0] = disabledButton;
-
-                    // Send an updated message with the disabled button
-                    await interaction.update({
-                        components: [interaction.message.components[0]],
-                    });
                 } else {
                     interaction.reply("You can't click this button because you didn't create the original interaction.");
                 }
