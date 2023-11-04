@@ -1,0 +1,1204 @@
+{
+    "swagger": "2.0",
+    "basePath": "/api/v3.0",
+    "paths": {
+      "/auction-house/listings/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/AuctionHouseItemSummary"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "List of current auction house listings. Updates every ~15m. \nLimit: 1440/day; 60/hour; 5/minute",
+          "operationId": "get_auction_house_listings_view_/auction-house/listings/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/cartels/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Cartel"
+                }
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve current capture status of all cartels.\n Limit: 1440/day; 60/hour; 5/minute",
+          "operationId": "get_cartels_api_view_/cartels/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/faction/{faction}/": {
+        "parameters": [
+          {
+            "name": "faction",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/FactionResponse"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve basic information for all whitelisted players of the requested faction. \nValid factions are [civ, med, cop, swat]",
+          "operationId": "get_faction_api_view_/faction/<regex(\"(civ|med|cop|swat)\"):faction>/",
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Faction"
+          ]
+        }
+      },
+      "/gangs/{gang_id}/": {
+        "parameters": [
+          {
+            "name": "gang_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Gang"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve basic data about a gang along with its members. \nLimit: 500/day; 60/hour; 5/minute",
+          "operationId": "get_gang_api_view_/gangs/<int:gang_id>/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/players/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Player"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve data for multiple players. \nLimit: 250/day; 60/hour; 5/minute",
+          "operationId": "get_players_api_view_/players/",
+          "parameters": [
+            {
+              "in": "query",
+              "description": "List of comma separated steam 64 ids, max 250",
+              "name": "player_ids",
+              "type": "string"
+            },
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/players/{player_id}/": {
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Player"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve data for a single player. \nConsider using the bulk `players` endpoint if you need to request data for multiple players. \nLimit: 500/day; 120/hour; 10/minute",
+          "operationId": "get_player_api_view_/players/<string:player_id>/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/public/mission/latest/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Mission"
+                }
+              }
+            }
+          },
+          "description": "Information about the latest mission file versions & download urls",
+          "operationId": "get_latest_mission_view_/public/mission/latest/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "tags": [
+            "Public"
+          ]
+        }
+      },
+      "/public/mission/latest/download/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "description": "download the latest life mission",
+          "operationId": "get_latest_mission_download_view_/public/mission/latest/download/",
+          "tags": [
+            "Public"
+          ]
+        }
+      },
+      "/public/mission/latest/download/{type}/{map}/": {
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "map",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "description": "download the latest mission",
+          "operationId": "get_latest_mission_download_view_/public/mission/latest/download/<string:type>/<string:map>/",
+          "tags": [
+            "Public"
+          ]
+        }
+      },
+      "/public/static/items/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/StaticItemsConfig"
+              }
+            }
+          },
+          "description": "Return static item configuration information",
+          "operationId": "get_static_items_config_view_/public/static/items/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "tags": [
+            "Public"
+          ]
+        }
+      },
+      "/servers/": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ServerStatus"
+                }
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve current status of all servers. Updates every ~5m. \nLimit: 1440/day; 60/hour; 5/minute",
+          "operationId": "get_server_status_api_view_/servers/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/shed-inventory/{shed_id}/": {
+        "parameters": [
+          {
+            "name": "shed_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/GangShedInventoryResponse"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve gang shed inventory. \nLimit: 500/day;60/hour;5/minute",
+          "operationId": "get_gang_shed_inventory_view_/shed-inventory/<int:shed_id>/",
+          "parameters": [
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      },
+      "/shed-ledger/{shed_id}/": {
+        "parameters": [
+          {
+            "name": "shed_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "get": {
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/GangShedLedgerResponse"
+              }
+            },
+            "429": {
+              "description": "Too many requests"
+            }
+          },
+          "description": "Retrieve recent gang shed item transfers. \nSource data updated ~daily, may take up to 72 hours for ledger entries to appear. \nLimit: 500/day;60/hour;5/minute",
+          "operationId": "get_gang_shed_ledger_api_view_/shed-ledger/<int:shed_id>/",
+          "parameters": [
+            {
+              "in": "query",
+              "description": "Optionally specify page to view less recent transactions",
+              "name": "page",
+              "type": "string"
+            },
+            {
+              "name": "X-Fields",
+              "in": "header",
+              "type": "string",
+              "format": "mask",
+              "description": "An optional fields mask"
+            }
+          ],
+          "security": [
+            {
+              "token": []
+            }
+          ],
+          "tags": [
+            "Default"
+          ]
+        }
+      }
+    },
+    "info": {
+      "title": "Olympus API",
+      "version": "3.0",
+      "description": "\n    !!!ABUSE OF THIS API MAY RESULT IN ADMINISTRATIVE ACTION!!!\n\n    This API is currently under development and in beta. Changes may come without warning.\n\n    If you encounter issues, please submit a bug report. If there is additional information you'd like to request be available, submit a feature request as a general inquiry.\n\n    To obtain a gang API token as a gang leader, visit your gang's profile on the stats page and click \"New Token\" under the \"API Tokens\" tab.\n\n    Notes:\n    - The token must be passed in the `Authorization` header and prefixed with `Token `\n    - You can only access your gang & players in your gang with the basic gang token\n    - Some endpoints/data may not be available to you with a basic gang token\n    - All endpoints are heavily rate-limited, use bulk endpoints when possible to reduce # of calls\n    "
+    },
+    "produces": [
+      "application/json"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "securityDefinitions": {
+      "token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    },
+    "tags": [
+      {
+        "name": "Default",
+        "description": "default namespace"
+      },
+      {
+        "name": "Faction",
+        "description": "available to faction leadership"
+      },
+      {
+        "name": "Public"
+      }
+    ],
+    "definitions": {
+      "Player": {
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "bank": {
+            "type": "integer"
+          },
+          "cash": {
+            "type": "integer"
+          },
+          "deposit_box": {
+            "type": "integer"
+          },
+          "vigi_arrests": {
+            "type": "integer",
+            "description": "Number of arrests on active license"
+          },
+          "current_title": {
+            "type": "string"
+          },
+          "gang": {
+            "$ref": "#/definitions/GangMember"
+          },
+          "cop_level": {
+            "type": "integer"
+          },
+          "swat_level": {
+            "type": "integer"
+          },
+          "medic_level": {
+            "type": "integer"
+          },
+          "last_side": {
+            "type": "string"
+          },
+          "last_active": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_server": {
+            "type": "string"
+          },
+          "playtime_civ": {
+            "type": "integer"
+          },
+          "playtime_cop": {
+            "type": "integer"
+          },
+          "playtime_med": {
+            "type": "integer"
+          },
+          "playtime_swat": {
+            "type": "integer"
+          },
+          "kills": {
+            "type": "integer"
+          },
+          "deaths": {
+            "type": "integer"
+          },
+          "revives": {
+            "type": "integer"
+          },
+          "total_arrests": {
+            "type": "integer"
+          },
+          "stats": {
+            "$ref": "#/definitions/PlayerStats"
+          }
+        },
+        "type": "object"
+      },
+      "GangMember": {
+        "properties": {
+          "gang_id": {
+            "type": "integer"
+          },
+          "gang_name": {
+            "type": "string"
+          },
+          "player_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "PlayerStats": {
+        "properties": {
+          "vigi_arrests": {
+            "type": "integer"
+          },
+          "marijuana_sold": {
+            "type": "integer"
+          },
+          "heroin_sold": {
+            "type": "integer"
+          },
+          "cocaine_sold": {
+            "type": "integer"
+          },
+          "meth_sold": {
+            "type": "integer"
+          },
+          "mushroom_sold": {
+            "type": "integer"
+          },
+          "frog_sold": {
+            "type": "integer"
+          },
+          "oil_sold": {
+            "type": "integer"
+          },
+          "iron_sold": {
+            "type": "integer"
+          },
+          "diamond_sold": {
+            "type": "integer"
+          },
+          "glass_sold": {
+            "type": "integer"
+          },
+          "cement_sold": {
+            "type": "integer"
+          },
+          "platinum_sold": {
+            "type": "integer"
+          },
+          "moonshine_sold": {
+            "type": "integer"
+          },
+          "fish_sold": {
+            "type": "integer"
+          },
+          "salt_sold": {
+            "type": "integer"
+          },
+          "silver_sold": {
+            "type": "integer"
+          },
+          "alloy_sold": {
+            "type": "integer"
+          },
+          "copper_sold": {
+            "type": "integer"
+          },
+          "gold_sold": {
+            "type": "integer"
+          },
+          "turtle_sold": {
+            "type": "integer"
+          },
+          "redgull_used": {
+            "type": "integer"
+          },
+          "lockpick_failed": {
+            "type": "integer"
+          },
+          "bombs_fed": {
+            "type": "integer"
+          },
+          "epipens_used": {
+            "type": "integer"
+          },
+          "salvage_sold": {
+            "type": "integer"
+          },
+          "salvage_sold_value": {
+            "type": "integer"
+          },
+          "speedbombs_used": {
+            "type": "integer"
+          },
+          "lockpick_success": {
+            "type": "integer"
+          },
+          "revives": {
+            "type": "integer"
+          },
+          "contraband_sold": {
+            "type": "integer"
+          },
+          "cop_money": {
+            "type": "integer"
+          },
+          "bloodbags_used": {
+            "type": "integer"
+          },
+          "tickets_paid": {
+            "type": "integer"
+          },
+          "ticket_vals": {
+            "type": "integer"
+          },
+          "bombs_defused": {
+            "type": "integer"
+          },
+          "kidneys_harvested": {
+            "type": "integer"
+          },
+          "coffee_used": {
+            "type": "integer"
+          },
+          "fish_sold_value": {
+            "type": "integer"
+          },
+          "bombs_jail": {
+            "type": "integer"
+          },
+          "bombs_bw": {
+            "type": "integer"
+          },
+          "civ_kills": {
+            "type": "integer"
+          },
+          "cop_kills": {
+            "type": "integer"
+          },
+          "players_robbed": {
+            "type": "integer"
+          },
+          "prison_time": {
+            "type": "integer"
+          },
+          "sui_vest": {
+            "type": "integer"
+          },
+          "plane_kills": {
+            "type": "integer"
+          },
+          "aa_hacked": {
+            "type": "integer"
+          },
+          "aa_repaired": {
+            "type": "integer"
+          },
+          "cop_lethals": {
+            "type": "integer"
+          },
+          "cop_pardons": {
+            "type": "integer"
+          },
+          "cop_arrests": {
+            "type": "integer"
+          },
+          "tickets_issued_paid": {
+            "type": "integer"
+          },
+          "donuts_used": {
+            "type": "integer"
+          },
+          "drugs_seized_currency": {
+            "type": "integer"
+          },
+          "med_toolkits": {
+            "type": "integer"
+          },
+          "med_impounds": {
+            "type": "integer"
+          },
+          "titan_hits": {
+            "type": "integer"
+          },
+          "hits_claimed": {
+            "type": "integer"
+          },
+          "hits_placed": {
+            "type": "integer"
+          },
+          "bets_won": {
+            "type": "integer"
+          },
+          "bets_lost": {
+            "type": "integer"
+          },
+          "bets_won_value": {
+            "type": "integer"
+          },
+          "bets_lost_value": {
+            "type": "integer"
+          },
+          "vehicles_chopped": {
+            "type": "integer"
+          },
+          "cops_robbed": {
+            "type": "integer"
+          },
+          "jail_escapes": {
+            "type": "integer"
+          },
+          "money_spent": {
+            "type": "integer"
+          },
+          "events_won": {
+            "type": "integer"
+          },
+          "kills_1km": {
+            "type": "integer"
+          },
+          "conquest_kills": {
+            "type": "integer"
+          },
+          "conquest_deaths": {
+            "type": "integer"
+          },
+          "conquest_captures": {
+            "type": "integer"
+          },
+          "conquest_swat_kills": {
+            "type": "integer"
+          },
+          "conquest_swat_deaths": {
+            "type": "integer"
+          },
+          "conquest_swat_captures": {
+            "type": "integer"
+          },
+          "casino_winnings": {
+            "type": "integer"
+          },
+          "casino_losses": {
+            "type": "integer"
+          },
+          "casino_uses": {
+            "type": "integer"
+          },
+          "lethal_injections": {
+            "type": "integer"
+          },
+          "pharmas_sold": {
+            "type": "integer"
+          },
+          "plane_deliveries": {
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Gang": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "bank": {
+            "type": "integer"
+          },
+          "kills": {
+            "type": "integer"
+          },
+          "deaths": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/GangMember"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "GangShedLedgerResponse": {
+        "properties": {
+          "transactions": {
+            "$ref": "#/definitions/GangShedTransaction"
+          },
+          "pagination": {
+            "$ref": "#/definitions/Pagination"
+          }
+        },
+        "type": "object"
+      },
+      "GangShedTransaction": {
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the interaction occurred"
+          },
+          "player_id": {
+            "type": "string",
+            "description": "The player id of the interacting player"
+          },
+          "player_name": {
+            "type": "string",
+            "description": "The name of the interacting player"
+          },
+          "changed_physical": {
+            "type": "array",
+            "description": "Difference in physical items before and after interaction where positive quantities represent adding items.",
+            "items": {
+              "$ref": "#/definitions/InventoryItem"
+            }
+          },
+          "changed_virtual": {
+            "type": "array",
+            "description": "Difference in virtual items before and after interaction where positive quantities represent adding items.",
+            "items": {
+              "$ref": "#/definitions/InventoryItem"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "InventoryItem": {
+        "properties": {
+          "item": {
+            "type": "string",
+            "description": "Classname of the item; defined by Arma 3 for physical items"
+          },
+          "name": {
+            "type": "string",
+            "description": "Readable name for the item used in-game"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Pagination": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": "Current page"
+          },
+          "size": {
+            "type": "integer",
+            "description": "Page size"
+          },
+          "pages": {
+            "type": "integer",
+            "description": "Total number of pages"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Total number of entries"
+          }
+        },
+        "type": "object"
+      },
+      "GangShedInventoryResponse": {
+        "properties": {
+          "physical_inventory": {
+            "$ref": "#/definitions/InventoryItem"
+          },
+          "virtual_inventory": {
+            "$ref": "#/definitions/InventoryItem"
+          }
+        },
+        "type": "object"
+      },
+      "Cartel": {
+        "properties": {
+          "server": {
+            "type": "integer",
+            "description": "Server number (1-3)",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Meth"
+          },
+          "full_name": {
+            "type": "string",
+            "example": "Meth, Weed, and Cocaine"
+          },
+          "gang_id": {
+            "type": "integer",
+            "example": 111
+          },
+          "gang_name": {
+            "type": "string",
+            "example": "The Dirty Bastards"
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Capture %, 0-100",
+            "example": 95
+          }
+        },
+        "type": "object"
+      },
+      "ServerStatus": {
+        "properties": {
+          "server": {
+            "type": "integer",
+            "example": 1
+          },
+          "cop": {
+            "type": "integer",
+            "example": 10
+          },
+          "med": {
+            "type": "integer",
+            "example": 3
+          },
+          "civ": {
+            "type": "integer",
+            "example": 110
+          },
+          "total": {
+            "type": "integer",
+            "example": 123
+          }
+        },
+        "type": "object"
+      },
+      "AuctionHouseItemSummary": {
+        "properties": {
+          "classname": {
+            "type": "string"
+          },
+          "cheapest": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "latest_created_on": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "FactionResponse": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "player_id": {
+            "type": "string"
+          },
+          "gang": {
+            "$ref": "#/definitions/GangMember"
+          },
+          "forums_id": {
+            "type": "integer"
+          },
+          "cop_level": {
+            "type": "integer"
+          },
+          "cop_squad": {
+            "type": "string"
+          },
+          "swat_level": {
+            "type": "integer"
+          },
+          "swat_squad": {
+            "type": "string"
+          },
+          "swat_kills": {
+            "type": "integer"
+          },
+          "medic_level": {
+            "type": "integer"
+          },
+          "medic_squad": {
+            "type": "string"
+          },
+          "civ_council_level": {
+            "type": "integer"
+          },
+          "civ_council_squad": {
+            "type": "string"
+          },
+          "designer_level": {
+            "type": "integer"
+          },
+          "developer_level": {
+            "type": "integer"
+          },
+          "support_level": {
+            "type": "integer"
+          },
+          "support_squad": {
+            "type": "string"
+          },
+          "playtime_civ": {
+            "type": "integer"
+          },
+          "playtime_cop": {
+            "type": "integer"
+          },
+          "playtime_med": {
+            "type": "integer"
+          },
+          "playtime_swat": {
+            "type": "integer"
+          },
+          "revives": {
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Mission": {
+        "properties": {
+          "map": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "StaticItemsConfig": {
+        "properties": {
+          "physical": {
+            "$ref": "#/definitions/PhysicalItemConfigDictionary"
+          },
+          "virtual": {
+            "$ref": "#/definitions/VirtualItemConfigDictionary"
+          }
+        },
+        "type": "object"
+      },
+      "PhysicalItemConfigDictionary": {
+        "properties": {
+          "*": {
+            "type": "object",
+            "example": {
+              "name": "PDW2000 9 mm",
+              "weight": 1,
+              "illegal": false,
+              "category": "weapon.lethal.smg",
+              "auctionable": true
+            },
+            "additionalProperties": {
+              "$ref": "#/definitions/ItemConfig"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "ItemConfig": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "illegal": {
+            "type": "boolean"
+          },
+          "auctionable": {
+            "type": "boolean"
+          },
+          "category": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VirtualItemConfigDictionary": {
+        "properties": {
+          "*": {
+            "type": "object",
+            "example": {
+              "name": "RedGull",
+              "illegal": false,
+              "weight": 1,
+              "category": "general",
+              "auctionable": true
+            },
+            "additionalProperties": {
+              "$ref": "#/definitions/ItemConfig"
+            }
+          }
+        },
+        "type": "object"
+      }
+    },
+    "responses": {
+      "ParseError": {
+        "description": "When a mask can't be parsed"
+      },
+      "MaskError": {
+        "description": "When any error occurs on mask"
+      }
+    }
+  }
