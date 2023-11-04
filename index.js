@@ -1,6 +1,6 @@
 const dotenv = require('dotenv').config();
 const { Client, Collection, Events, GatewayIntentBits, User, ButtonInteraction } = require('discord.js');
-const fs = require('node:fs');
+const fs = require('fs');
 const path = require('node:path');
 const { readData, handleCaptureDetails } = require('./modules/functions');
 
