@@ -53,7 +53,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
                     interaction.deferUpdate();
-                    interaction.message.components[0].components[0].setStyle('SECONDARY')
+                    interaction.component.disabled = true;
 
                 } else {
                     interaction.reply("You can't click this button because you didn't create the original interaction.");
