@@ -5,7 +5,7 @@ const path = require('node:path');
 const { readData, handleCaptureDetails } = require('./modules/functions');
 
 const TOKEN = process.env.DISCORD_TOKEN;
-const REQUIRED_ROLE = 'Crucio Member';
+const REQUIRED_ROLE = '1169773205100171294';
 const STOP_BUTTON_ID = 'Stop-Capturing';
 
 const client = new Client({
@@ -70,7 +70,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         // Check if the interaction is in a guild context
         if (interaction.guild) {
             const member = interaction.guild.members.cache.get(interaction.user.id);
-            const requiredRole = interaction.guild.roles.cache.find(role => role.name === REQUIRED_ROLE);
+            const requiredRole = interaction.guild.roles.cache.find(role => role.id === REQUIRED_ROLE);
 
             if (!member.roles.cache.has(requiredRole.id)) {
                 interaction.reply('You do not have the required permissions to use this command.');
