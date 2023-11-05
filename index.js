@@ -38,6 +38,14 @@ for (const folder of commandFolders) {
 
 client.login(TOKEN);
 
+client.on("messageCreate", async (message) => {
+    const stafesID = "814362111361810452";
+    if (message.author.id === stafesID) { 
+        message.channel.send('Fuck off strafe.');
+        message.delete()
+    } 
+})
+
 client.on(Events.InteractionCreate, async (interaction) => {
     const isButtonInteraction = interaction.isButton();
     const isChatInputCommand = interaction.isCommand();
