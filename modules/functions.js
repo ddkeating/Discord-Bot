@@ -1,3 +1,5 @@
+// This controls the functions for all interactions, commands, and responses. 
+
 const axios = require('axios');
 const { cartelEmbeded, warzoneEmbedded } = require('./embedMessage.js');
 const fs = require('fs');

@@ -1,3 +1,5 @@
+// This is for updating slash commands and appending new commands.
+
 const { REST, Routes } = require('discord.js');
 const dotenv = require('dotenv').config();
 const fs = require('node:fs');

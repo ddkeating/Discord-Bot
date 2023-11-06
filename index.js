@@ -4,10 +4,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { readData, handleCaptureDetails } = require('./modules/functions');
 
-const TOKEN = process.env.DISCORD_TOKEN;
-const REQUIRED_ROLE = '1169773205100171294';
+const TOKEN = process.env.DISCORD_TOKEN; // Discord Bot Token
+const REQUIRED_ROLE = '1169773205100171294'; // Crucio Member role
 const STOP_BUTTON_ID = 'Stop-Capturing';
 
+// Defined bot intents as per bot access requirements.
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -22,6 +23,7 @@ client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
+// Handles slash command execution.
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -36,6 +38,7 @@ for (const folder of commandFolders) {
     }
 }
 
+// Assigns bot in using bot auth token.
 client.login(TOKEN);
 
 // client.on("messageCreate", async (message) => {
@@ -49,6 +52,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const isButtonInteraction = interaction.isButton();
     const isChatInputCommand = interaction.isCommand();
 
+    // If interaction is button, will handle button based on button id.
     if (isButtonInteraction && interaction.customId === STOP_BUTTON_ID) {
         // Ensure that the interaction is of type ButtonInteraction
         if (interaction instanceof ButtonInteraction) {
@@ -60,7 +64,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
 
-                } else {
+                } else { // Prevents other users from using the embedded.
                     interaction.reply("You can't click this button because you didn't create the original interaction.");
                 }
             }
@@ -85,8 +89,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 return;
             }
         }
-
-        try {
+        // Will attempt to execute code     
+        try { 
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
