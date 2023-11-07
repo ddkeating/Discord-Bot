@@ -47,14 +47,21 @@ client.login(TOKEN);
 //         message.channel.send('Fuck off strafe.');
 //     }
 // })
+let disconnectTimers = new Map(); // Declare a Map to store timers
+
 client.on('voiceStateUpdate', (oldState, newState) => {
     const newUserChannel = newState.channel;
     const oldUserChannel = oldState.channel;
-    const specificUserId = '803465993946529843'; // Replace with the target user's ID
+    const specificUserId = '193565213671292928'; // Replace with the target user's ID
 
     if (newUserChannel && newState.member.user.id === specificUserId) {
         const timeout = 150000; // 2.5 minutes in milliseconds
         const userId = newState.member.user.id;
+
+        // Clear any existing timer for this user
+        if (disconnectTimers.has(userId)) {
+            clearTimeout(disconnectTimers.get(userId));
+        }
 
         const disconnectTimer = setTimeout(() => {
             const user = newState.guild.members.cache.get(userId);
@@ -65,12 +72,19 @@ client.on('voiceStateUpdate', (oldState, newState) => {
                     .catch(console.error);
             }
         }, timeout);
+
+        // Store the timer in the map
+        disconnectTimers.set(userId, disconnectTimer);
     }
 
     if (oldUserChannel && oldState.member.user.id === specificUserId) {
         const userId = oldState.member.user.id;
+
         // Clear the timer associated with this user if they leave the channel
-        clearTimeout(disconnectTimer);
+        if (disconnectTimers.has(userId)) {
+            clearTimeout(disconnectTimers.get(userId));
+            disconnectTimers.delete(userId);
+        }
     }
 });
 
