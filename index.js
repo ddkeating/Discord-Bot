@@ -53,7 +53,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
     // Check if a user joined a voice channel
     if (!oldUserChannel && newUserChannel) {
-        const timeout = 150000; // 2.5 minutes in milliseconds
+        const timeout = 10000; // 2.5 minutes in milliseconds
         const userId = newState.member.user.id;
 
         // Set a timer to disconnect the user after the specified time
