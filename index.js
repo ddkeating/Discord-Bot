@@ -50,16 +50,15 @@ client.login(TOKEN);
 client.on('voiceStateUpdate', (oldState, newState) => {
     const newUserChannel = newState.channel;
     const oldUserChannel = oldState.channel;
+    const specificUserId = '803465993946529843'; // Replace with the target user's ID
 
-    // Check if a user joined a voice channel
-    if (!oldUserChannel && newUserChannel) {
-        const timeout = 10000; // 2.5 minutes in milliseconds
+    if (newUserChannel && newState.member.user.id === specificUserId) {
+        const timeout = 150000; // 2.5 minutes in milliseconds
         const userId = newState.member.user.id;
 
-        // Set a timer to disconnect the user after the specified time
         const disconnectTimer = setTimeout(() => {
             const user = newState.guild.members.cache.get(userId);
-            
+
             if (user && user.voice.channel) {
                 user.voice.setChannel(null)
                     .then(() => console.log(`Disconnected user ${user.user.tag} from the voice channel.`))
@@ -68,8 +67,10 @@ client.on('voiceStateUpdate', (oldState, newState) => {
         }, timeout);
     }
 
-    if (oldUserChannel && !newUserChannel) {
+    if (oldUserChannel && oldState.member.user.id === specificUserId) {
         const userId = oldState.member.user.id;
+        // Clear the timer associated with this user if they leave the channel
+        clearTimeout(disconnectTimer);
     }
 });
 
