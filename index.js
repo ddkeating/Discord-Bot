@@ -1,5 +1,5 @@
 const dotenv = require('dotenv').config();
-const { Client, Collection, Events, GatewayIntentBits, User, ButtonInteraction } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, User, ButtonInteraction, Collector, ButtonComponent } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const { readData, handleCaptureDetails } = require('./modules/functions');
@@ -43,10 +43,35 @@ client.login(TOKEN);
 
 // client.on("messageCreate", async (message) => {
 //     const stafesID = "814362111361810452";
-//     if (message.author.id === stafesID) { 
+//     if (message.author.id === stafesID) {
 //         message.channel.send('Fuck off strafe.');
-//     } 
+//     }
 // })
+client.on('voiceStateUpdate', (oldState, newState) => {
+    const newUserChannel = newState.channel;
+    const oldUserChannel = oldState.channel;
+
+    // Check if a user joined a voice channel
+    if (!oldUserChannel && newUserChannel) {
+        const timeout = 150000; // 2.5 minutes in milliseconds
+        const userId = newState.member.user.id;
+
+        // Set a timer to disconnect the user after the specified time
+        const disconnectTimer = setTimeout(() => {
+            const user = newState.guild.members.cache.get(userId);
+            
+            if (user && user.voice.channel) {
+                user.voice.setChannel(null)
+                    .then(() => console.log(`Disconnected user ${user.user.tag} from the voice channel.`))
+                    .catch(console.error);
+            }
+        }, timeout);
+    }
+
+    if (oldUserChannel && !newUserChannel) {
+        const userId = oldState.member.user.id;
+    }
+});
 
 client.on(Events.InteractionCreate, async (interaction) => {
     const isButtonInteraction = interaction.isButton();
@@ -63,6 +88,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 if (originalInteraction.user.id === interaction.user.id) {
                     const warzoneLog = readData(interaction);
                     handleCaptureDetails(interaction, warzoneLog);
+                    
 
                 } else { // Prevents other users from using the embedded.
                     interaction.reply("You can't click this button because you didn't create the original interaction.");
