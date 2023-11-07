@@ -47,32 +47,32 @@ client.login(TOKEN);
 //         message.channel.send('Fuck off strafe.');
 //     }
 // })
-client.on('voiceStateUpdate', (oldState, newState) => {
-    const newUserChannel = newState.channel;
-    const oldUserChannel = oldState.channel;
-    const specificUserId = '803465993946529843'; // Replace with the target user's ID
+// client.on('voiceStateUpdate', (oldState, newState) => {
+//     const newUserChannel = newState.channel;
+//     const oldUserChannel = oldState.channel;
+//     const specificUserId = '803465993946529843'; // Replace with the target user's ID
 
-    if (newUserChannel && newState.member.user.id === specificUserId) {
-        const timeout = 150000; // 2.5 minutes in milliseconds
-        const userId = newState.member.user.id;
+//     if (newUserChannel && newState.member.user.id === specificUserId) {
+//         const timeout = 150000; // 2.5 minutes in milliseconds
+//         const userId = newState.member.user.id;
 
-        const disconnectTimer = setTimeout(() => {
-            const user = newState.guild.members.cache.get(userId);
+//         const disconnectTimer = setTimeout(() => {
+//             const user = newState.guild.members.cache.get(userId);
 
-            if (user && user.voice.channel) {
-                user.voice.setChannel(null)
-                    .then(() => console.log(`Disconnected user ${user.user.tag} from the voice channel.`))
-                    .catch(console.error);
-            }
-        }, timeout);
-    }
+//             if (user && user.voice.channel) {
+//                 user.voice.setChannel(null)
+//                     .then(() => console.log(`Disconnected user ${user.user.tag} from the voice channel.`))
+//                     .catch(console.error);
+//             }
+//         }, timeout);
+//     }
 
-    if (oldUserChannel && oldState.member.user.id === specificUserId) {
-        const userId = oldState.member.user.id;
-        // Clear the timer associated with this user if they leave the channel
-        clearTimeout(disconnectTimer);
-    }
-});
+//     if (oldUserChannel && oldState.member.user.id === specificUserId) {
+//         const userId = oldState.member.user.id;
+//         // Clear the timer associated with this user if they leave the channel
+//         clearTimeout(disconnectTimer);
+//     }
+// });
 
 client.on(Events.InteractionCreate, async (interaction) => {
     const isButtonInteraction = interaction.isButton();
