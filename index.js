@@ -60,7 +60,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     
 
                 } else { // Prevents other users from using the embedded.
-                    interaction.reply("You can't click this button because you didn't create the original interaction.");
+                    interaction.reply({ content: "You can't click this button because you didn't create the original interaction.", ephemeral: true });
                 }
             }
         }
