@@ -167,7 +167,7 @@ async function handleCaptureDetails(interaction, data) {
 	let reformattedMoney = currentGangFunds.replace(/,/g, "");
 	const diff = newGangBank - reformattedMoney;
 
-	if (isNaN(diff) || diff <= 0) {
+	if (isNaN(diff) || diff == 0) {
 		interaction.reply(
 			`Member @${playerName} made no profit from holding capture points.`
 		);
