@@ -1,8 +1,16 @@
 // This controls the functions for all interactions, commands, and responses.
+const {
+	EmbedBuilder,
+	ButtonBuilder,
+	ActionRowBuilder,
+	ButtonStyle,
+} = require("discord.js");
 
 const axios = require("axios");
 const { cartelEmbeded, warzoneEmbedded } = require("./embedMessage.js");
 const fs = require("fs");
+
+var showVirtualItems = true;
 
 async function updateCartels(message) {
 	try {
@@ -46,7 +54,12 @@ async function updateCartels(message) {
 	}
 }
 
-async function shedInventory(message) {
+async function switchInventory(interaction) {
+	showVirtualItems = !showVirtualItems;
+	await shedInventory(interaction, true);
+}
+
+async function getInventoryData() {
 	try {
 		const response = await axios.get(
 			"https://stats.olympus-entertainment.com/api/v3.0/shed-inventory/1207/",
@@ -57,16 +70,58 @@ async function shedInventory(message) {
 				},
 			}
 		);
-
-		// Convert the response data to a formatted JSON string
-		const responseDataString = JSON.stringify(response.data, null, 2);
-
-		// Send the formatted JSON string to the Discord channel
-		message.reply("Shed Inventory:\n```json\n" + responseDataString + "\n```");
+		return response.data;
 	} catch (error) {
 		console.error(
-			`Caught unexpected error while retrieving shed inventory, ${error}`
+			`Caught unexpected error while retrieving shed inventory: ${error}`
 		);
+		throw error; // Propagate the error for handling elsewhere if needed
+	}
+}
+
+function buildInventoryEmbed(data, showVirtualItems) {
+	const { virtual_inventory, physical_inventory } = data;
+	const inventory = showVirtualItems ? virtual_inventory : physical_inventory;
+	const inventoryType = showVirtualItems
+		? "Virtual Inventory"
+		: "Physical Inventory";
+
+	const shedEmbed = new EmbedBuilder()
+		.setColor("DarkOrange")
+		.setTitle("Shed Inventory")
+		.setDescription(inventoryType);
+
+	inventory.forEach((item) => {
+		shedEmbed.addFields({
+			name: `${item.name}`,
+			value: `Quantity: ${item.quantity}`,
+			inline: true,
+		});
+	});
+
+	return shedEmbed;
+}
+
+async function shedInventory(message, randomBool) {
+	try {
+		const data = await getInventoryData();
+		const shedEmbed = buildInventoryEmbed(data, showVirtualItems); // Pass showVirtualItems here
+
+		const buttonSwitchInventory = new ButtonBuilder()
+			.setCustomId("toggleInventory")
+			.setLabel("Switch")
+			.setStyle(ButtonStyle.Primary);
+
+		const row = new ActionRowBuilder().addComponents(buttonSwitchInventory);
+
+		if (!randomBool) {
+			await message.reply({ embeds: [shedEmbed], components: [row] });
+		} else {
+			await message.message.edit({ embeds: [shedEmbed], components: [row] });
+			await message.deferUpdate();
+		}
+	} catch (error) {
+		console.error(`Caught unexpected error while generating embed: ${error}`);
 	}
 }
 
@@ -184,3 +239,4 @@ exports.startTimer = startTimer;
 exports.storeData = storeData;
 exports.readData = readData;
 exports.handleCaptureDetails = handleCaptureDetails;
+exports.switchInventory = switchInventory;

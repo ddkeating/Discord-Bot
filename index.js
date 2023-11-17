@@ -11,7 +11,11 @@ const {
 } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
-const { readData, handleCaptureDetails } = require("./modules/functions");
+const {
+	readData,
+	handleCaptureDetails,
+	switchInventory,
+} = require("./modules/functions");
 
 const TOKEN = process.env.DISCORD_TOKEN; // Discord Bot Token
 const REQUIRED_ROLE = "1169773205100171294"; // Crucio Member role
@@ -83,6 +87,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			}
 		}
 		return;
+	}
+
+	if (isButtonInteraction) {
+		if (interaction.customId === "toggleInventory") {
+			await switchInventory(interaction);
+		}
 	}
 	if (isChatInputCommand) {
 		const command = interaction.client.commands.get(interaction.commandName);
