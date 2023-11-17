@@ -189,21 +189,29 @@ async function storeData(interaction, money, time) {
 async function readData(interaction) {
 	const playerName = interaction.member.displayName;
 	try {
-		const data = JSON.parse(fs.readFileSync("warzonelogs.json"));
+		let foundList = null;
+		const data = fs.readFileSync("warzonelogs.json", "utf-8");
 
-		// Check if the playerName exists in the JSON data
-		if (data[playerName]) {
-			const foundList = data[playerName];
-			delete data[playerName];
-			return foundList;
-		} else {
-			return null; // Return null if the playerName doesn't exist
+		if (data.trim() !== "") {
+			const parsedData = JSON.parse(data);
+
+			// Check if the playerName exists in the parsed data
+			if (parsedData[playerName]) {
+				foundList = parsedData[playerName];
+				delete parsedData[playerName];
+				fs.writeFileSync(
+					"warzonelogs.json",
+					JSON.stringify(parsedData, null, 2)
+				);
+			}
 		}
+
+		return foundList;
 	} catch (error) {
-		console.log(error);
+		console.log("Error reading or parsing warzonelogs.json:", error);
+		return null; // Return null in case of errors
 	}
 }
-
 async function handleCaptureDetails(interaction, data) {
 	const dataObject = await data;
 	const { currentGangFunds, playerName, currentTime } = dataObject;
